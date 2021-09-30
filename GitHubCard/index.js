@@ -1,8 +1,12 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +32,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +53,55 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardMaker ( { avatar_URL, login, location, html_url, followers, following, bio }) {
+  // axios.get('https://api.github.com/users/drau88').catch(err => {console.error(err)}).finally(() => {console.log('I work')});
+  //Creating markup
+  const cardDiv = document.createElement('div'); //Main parent
+  const userImg = document.createElement('img'); // Child to cardDiv
+  const cardInfoDiv = document.createElement('div'); //Main child
+  const cardInfoH3 = document.createElement('h3');
+  const cardInfoUsername = document.createElement('p');
+  const userLocation = document.createElement('p');
+  const profile = document.createElement('p'); //Parent to anchor
+  const githubLink = document.createElement('a'); // Child to profile
+  const followersP = document.createElement('p');
+  const followingP = document.createElement('p');
+  const bioP = document.createElement('p');
+  //Adding classes
+  cardDiv.classList.add('card');
+  cardInfoH3.classList.add('name');
+  cardInfoUsername.classList.add('username');
+  //Adding structure to elements
+  cardDiv.appendChild(userImg);
+  cardDiv.appendChild(cardInfoDiv);
+  cardInfoDiv.appendChild(cardInfoH3);
+  cardInfoDiv.appendChild(cardInfoUsername);
+  cardInfoDiv.appendChild(userLocation);
+  cardInfoDiv.appendChild(profile);
+  cardInfoDiv.appendChild(followersP);
+  cardInfoDiv.appendChild(followingP);
+  cardInfoDiv.appendChild(bioP);
+  profile.appendChild(githubLink);
+  //Passing properties
+  userImg.setAttribute('src', avatar_URL);
+  cardInfoH3.textContent = 'Daniel Rau';
+  cardInfoUsername.textContent = login;
+  userLocation.textContent = `Location: ${location}`;
+  profile.textContent = 'Profile:'
+  githubLink.setAttribute('src', html_url);
+  githubLink.textContent = html_url;
+  followersP.textContent = `Followers: ${followers}`;
+  followingP.textContent = `Following: ${following}`;
+  bioP.textContent = `Bio: ${bio}`;
+
+// Return main parent element
+return cardDiv;
+}
+const entryPoint = document.querySelector('.cards')
+
+const testCard = cardMaker({ avatar_URL : 'blah', login : 'blah', location : 'blah', html_url : 'blah', followers : 'blah', following : 'blah', bio : 'blah'});
+console.log(testCard);
 
 /*
   List of LS Instructors Github username's:
