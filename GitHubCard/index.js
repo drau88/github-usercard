@@ -7,6 +7,7 @@ import axios from "axios";
 */
 
 
+ 
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -54,8 +55,12 @@ const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigkne
     </div>
 */
 
-function cardMaker ( { avatar_URL, login, location, html_url, followers, following, bio }) {
-  // axios.get('https://api.github.com/users/drau88').catch(err => {console.error(err)}).finally(() => {console.log('I work')});
+const entryPoint = document.querySelector('.cards');
+
+
+
+function cardMaker (object){
+  
   //Creating markup
   const cardDiv = document.createElement('div'); //Main parent
   const userImg = document.createElement('img'); // Child to cardDiv
@@ -77,31 +82,40 @@ function cardMaker ( { avatar_URL, login, location, html_url, followers, followi
   cardDiv.appendChild(cardInfoDiv);
   cardInfoDiv.appendChild(cardInfoH3);
   cardInfoDiv.appendChild(cardInfoUsername);
+  cardInfoDiv.appendChild(githubLink);
   cardInfoDiv.appendChild(userLocation);
   cardInfoDiv.appendChild(profile);
   cardInfoDiv.appendChild(followersP);
   cardInfoDiv.appendChild(followingP);
   cardInfoDiv.appendChild(bioP);
-  profile.appendChild(githubLink);
+  
   //Passing properties
-  userImg.setAttribute('src', avatar_URL);
+  userImg.setAttribute('src', object['data']['avatar_url']);
   cardInfoH3.textContent = 'Daniel Rau';
-  cardInfoUsername.textContent = login;
-  userLocation.textContent = `Location: ${location}`;
+  cardInfoUsername.textContent = object.login;
+  userLocation.textContent = `Location: ${object.data.location}`;
   profile.textContent = 'Profile:'
-  githubLink.setAttribute('src', html_url);
-  githubLink.textContent = html_url;
-  followersP.textContent = `Followers: ${followers}`;
-  followingP.textContent = `Following: ${following}`;
-  bioP.textContent = `Bio: ${bio}`;
+  githubLink.setAttribute('src', object.data.html_url);
+  githubLink.textContent = object.data.html_url;
+  followersP.textContent = `Followers: ${object.data.followers}`;
+  followingP.textContent = `Following: ${object.data.following}`;
+  bioP.textContent = `Bio: ${object.data.bio}`;
 
 // Return main parent element
 return cardDiv;
 }
-const entryPoint = document.querySelector('.cards')
 
-const testCard = cardMaker({ avatar_URL : 'blah', login : 'blah', location : 'blah', html_url : 'blah', followers : 'blah', following : 'blah', bio : 'blah'});
-console.log(testCard);
+axios.get('https://api.github.com/users/drau88')
+    .then( response => {
+      console.log(response);
+      const danielCard = cardMaker(response);
+        entryPoint.appendChild(danielCard);
+  
+  })
+    .catch(error => {
+      console.log(error);
+  })
+
 
 /*
   List of LS Instructors Github username's:
