@@ -1,8 +1,13 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+
+ 
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +33,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +54,77 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const entryPoint = document.querySelector('.cards');
+
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+followersArray.forEach(item => {
+  axios.get(`https://api.github.com/users/${item}`)
+    .then(response => {
+      response.data.login = item;
+      const followerCard = cardMaker(response);
+      entryPoint.appendChild(followerCard); 
+    })
+
+})
+
+function cardMaker (object){
+  
+  //Creating markup
+  const cardDiv = document.createElement('div'); //Main parent
+  const userImg = document.createElement('img'); // Child to cardDiv
+  const cardInfoDiv = document.createElement('div'); //Main child
+  const cardInfoH3 = document.createElement('h3');
+  const cardInfoUsername = document.createElement('p');
+  const userLocation = document.createElement('p');
+  const profile = document.createElement('p'); //Parent to anchor
+  const githubLink = document.createElement('a'); // Child to profile
+  const followersP = document.createElement('p');
+  const followingP = document.createElement('p');
+  const bioP = document.createElement('p');
+  //Adding classes
+  cardDiv.classList.add('card');
+  cardInfoH3.classList.add('name');
+  cardInfoUsername.classList.add('username');
+  //Adding structure to elements
+  cardDiv.appendChild(userImg);
+  cardDiv.appendChild(cardInfoDiv);
+  cardInfoDiv.appendChild(cardInfoH3);
+  cardInfoDiv.appendChild(cardInfoUsername);
+  cardInfoDiv.appendChild(githubLink);
+  cardInfoDiv.appendChild(userLocation);
+  cardInfoDiv.appendChild(profile);
+  cardInfoDiv.appendChild(followersP);
+  cardInfoDiv.appendChild(followingP);
+  cardInfoDiv.appendChild(bioP);
+  
+  //Passing properties
+  userImg.setAttribute('src', object['data']['avatar_url']);
+  cardInfoH3.textContent = object.data.login;
+  cardInfoUsername.textContent = object.data.login;
+  userLocation.textContent = `Location: ${object.data.location}`;
+  profile.textContent = 'Profile:'
+  githubLink.setAttribute('src', object.data.html_url);
+  githubLink.textContent = object.data.html_url;
+  followersP.textContent = `Followers: ${object.data.followers}`;
+  followingP.textContent = `Following: ${object.data.following}`;
+  bioP.textContent = `Bio: ${object.data.bio}`;
+
+// Return main parent element
+return cardDiv;
+}
+
+axios.get('https://api.github.com/users/drau88')
+    .then( response => {
+      response.data.login = 'Daniel Rau';
+      const danielCard = cardMaker(response);
+        entryPoint.appendChild(danielCard);
+  
+  })
+    .catch(error => {
+      console.log(error);
+  })
+
 
 /*
   List of LS Instructors Github username's:
